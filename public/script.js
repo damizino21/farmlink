@@ -1,59 +1,47 @@
 const form = document.getElementById("productForm");
+const productList = document.getElementById("productList");
 
 form.addEventListener("submit", (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const product = {
-        name: document.getElementById("name").value,
-        price: document.getElementBntById("location").value,
-        phone: document.getElementById("phone").value
-    };
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const location = document.getElementById("location").value;
+  const phone = document.getElementById("phone").value;
 
-    fetch("/add-product", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(product)
-    })
-    .then(res => res.json())
-    .then(() => {
-        form.reset();
-        loadProducts();
-    });
+  const product = { name, price, location, phone };
+
+  // Save to local storage
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  products.push(product);
+  localStorage.setItem("products", JSON.stringify(products));
+
+  displayProducts();
+  form.reset();
 });
 
-function loadProducts() {
-    fetch("/products")
-    .then(res => res.json())
-    .then(data => {
-        const list = document.getElementById("productList");
-        list.innerHTML = "";
+function displayProducts() {
+  const products = JSON.parse(localStorage.getItem("products")) || [];
+  productList.innerHTML = "";
 
-        data.forEach((product, index) => {
-            const div = document.createElement("div");
-            div.classList.add("product");
-
-            div.innerHTML = `
-                <strong>${product.name}</strong><br>
-                ₦${product.price} - ${product.location}<br>
-                📞 ${product.phone}
-                <button class="delete-btn" onclick="deleteProduct(${index})">Delete</button>
-            `;
-
-            list.appendChild(div);
-        });
-    });
+  products.forEach((p, index) => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+            <h4>${p.name}</h4>
+            <p>₦${p.price} - ${p.location}</p>
+            <p>${p.phone}</p>
+            <button onclick="deleteProduct(${index})">Delete</button>
+        `;
+    productList.appendChild(div);
+  });
 }
-
 
 function deleteProduct(index) {
-    fetch(`/delete-product/${index}`, {
-        method: 'DELETE'
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert("Product deleted!");
-        loadProducts();
-    });
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  products.splice(index, 1);
+  localStorage.setItem("products", JSON.stringify(products));
+  displayProducts();
 }
+
+// Load on page start
+displayProducts();
