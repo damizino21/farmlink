@@ -1,31 +1,142 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FarmLink</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FarmLink — Buy Direct from Farmers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<div class="container">
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">🌾</span>
+      <span class="brand-name">FarmLink</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="showSection('browse')">Browse</button>
+      <button class="nav-btn" onclick="showSection('sell')">Sell</button>
+      <button class="nav-btn" onclick="showSection('profile')">My Profile</button>
+    </div>
+  </nav>
 
-    <h1>FarmLink - Buy Direct from Farmers</h1>
+  <!-- BROWSE SECTION -->
+  <div id="browseSection">
+    <header class="hero">
+      <div class="hero-text">
+        <h1>Fresh from the <em>farm</em>,<br/>straight to you.</h1>
+        <p>Connect directly with Nigerian farmers. No middlemen. Fair prices.</p>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for tomatoes, rice, yam…" oninput="filterProducts()" />
+        <button class="search-btn" onclick="filterProducts()">🔍</button>
+      </div>
+      <div class="categories">
+        <button class="cat-pill active" onclick="filterByCategory('all', this)">All</button>
+        <button class="cat-pill" onclick="filterByCategory('grains', this)">🌾 Grains</button>
+        <button class="cat-pill" onclick="filterByCategory('vegetables', this)">🥬 Vegetables</button>
+        <button class="cat-pill" onclick="filterByCategory('fruits', this)">🍊 Fruits</button>
+        <button class="cat-pill" onclick="filterByCategory('livestock', this)">🐄 Livestock</button>
+        <button class="cat-pill" onclick="filterByCategory('tubers', this)">🥔 Tubers</button>
+        <button class="cat-pill" onclick="filterByCategory('dairy', this)">🥛 Dairy & Eggs</button>
+      </div>
+    </header>
 
-    <h2>Add Product</h2>
+    <section class="listing-section">
+      <div class="section-header">
+        <h2>Available Products</h2>
+        <span class="product-count" id="productCount">0 products</span>
+      </div>
+      <div id="productList" class="product-grid"></div>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <span>🌱</span>
+        <p>No products found. Try a different search or category.</p>
+      </div>
+    </section>
+  </div>
 
-    <form id="productForm">
-        <input type="text" id="name" placeholder="Product Name" required>
-        <input type="number" id="price" placeholder="Price" required>
-        <input type="text" id="location" placeholder="Location" required>
-        <input type="text" id="phone" placeholder="Phone Number" required>
-        <button type="submit">Add Product</button>
-    </form>
+  <!-- SELL SECTION -->
+  <section class="sell-section" id="sellSection" style="display:none">
+    <div class="form-card">
+      <h2>List Your Product</h2>
+      <p class="form-sub">Fill in the details below to reach buyers directly.</p>
+      <div class="form-group">
+        <label>Farmer Name</label>
+        <input type="text" id="farmerName" placeholder="e.g. Alhaji Musa Ibrahim" />
+      </div>
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" id="name" placeholder="e.g. Long Grain Rice" />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="category">
+          <option value="">-- Select Category --</option>
+          <option value="grains">🌾 Grains</option>
+          <option value="vegetables">🥬 Vegetables</option>
+          <option value="fruits">🍊 Fruits</option>
+          <option value="livestock">🐄 Livestock</option>
+          <option value="tubers">🥔 Tubers</option>
+          <option value="dairy">🥛 Dairy & Eggs</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (₦)</label>
+          <input type="text" id="price" placeholder="e.g. 5000" />
+        </div>
+        <div class="form-group">
+          <label>Quantity / Unit</label>
+          <input type="text" id="unit" placeholder="e.g. per bag" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Location (State / LGA)</label>
+        <input type="text" id="location" placeholder="e.g. Osun, Osogbo" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="e.g. 09130114343" />
+      </div>
+      <div class="form-group">
+        <label>Description <span class="optional">(optional)</span></label>
+        <textarea id="description" rows="3" placeholder="Tell buyers more about your product…"></textarea>
+      </div>
+      <button class="btn-primary" onclick="addProduct()">🌿 List Product</button>
+      <p id="formMsg" class="form-msg"></p>
+    </div>
+  </section>
 
-    <h2>Products</h2>
-    <div id="productList"></div>
+  <!-- PROFILE SECTION -->
+  <section class="profile-section" id="profileSection" style="display:none">
+    <div class="profile-card">
+      <div class="profile-avatar">👨‍🌾</div>
+      <div class="profile-info">
+        <h2>My Farm Listings</h2>
+        <p style="color:rgba(255,255,255,0.7)">All products you have listed on FarmLink</p>
+      </div>
+    </div>
+    <div class="my-listings">
+      <h3>My Listings</h3>
+      <div id="myProductList" class="product-grid"></div>
+      <p id="noListings" class="empty-note" style="display:none">
+        You haven't listed any products yet.
+        <button class="link-btn" onclick="showSection('sell')">Add one now →</button>
+      </p>
+    </div>
+  </section>
 
-</div>
+  <!-- MODAL -->
+  <div id="productModal" class="modal-overlay" style="display:none" onclick="closeModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
 
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "e8452dff-fcec-48e4-be24-83ef0dc0778b",
+    "farmerName": "zyno",
+    "name": "beans",
+    "category": "grains",
+    "price": "30000",
+    "unit": "bag",
+    "location": "Lagos",
+    "phone": "09130114343",
+    "description": "very sweet beans",
+    "createdAt": "2026-04-27T09:19:40.191Z"
+  },
+  {
+    "id": "a8c15be5-6196-4885-a7d3-84d79e501a39",
+    "farmerName": "Akala Damilola",
+    "name": "rice",
+    "category": "grains",
+    "price": "70,000",
+    "unit": "per bag",
+    "location": "osun",
+    "phone": "09130114343",
+    "description": "sweet",
+    "createdAt": "2026-04-27T08:53:31.010Z"
+  }
+]
